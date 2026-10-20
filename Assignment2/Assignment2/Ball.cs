@@ -33,7 +33,9 @@ public class Ball
         if (_position.X <= _playAreaBoundingBox.Left || (_position.X + _widthAndHeight) >= _playAreaBoundingBox.Right)
         {
             _velocity.X *= -1;
+            _position = new Vector2(375,225);
         }
+
         if (_position.Y <= _playAreaBoundingBox.Top || (_position.Y + _widthAndHeight) >= _playAreaBoundingBox.Bottom)
         {
             _velocity.Y *= -1;
