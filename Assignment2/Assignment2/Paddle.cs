@@ -6,7 +6,8 @@ namespace Assignment2;
 
 public class Paddle
 {
-    private const int _width = 12, _height = 108, _speed = 240;
+    private const int _width = 12, _height = 108, _baseSpeed = 120;
+    private int _speed = 120;
 
     private Texture2D _texture;
     private Vector2 _position, _velocity;   
@@ -17,9 +18,14 @@ public class Paddle
         set{ _velocity = value * _speed;}
     }
 
+    internal int Speed
+    {
+        set{_speed = _baseSpeed * value;}
+    }
+
     internal Rectangle BoundingBox
     {
-        get { return new Rectangle((int)_position.X, (int)_position.Y, _PaddleWidth, _PaddleHeight);}
+        get { return new Rectangle((int)_position.X, (int)_position.Y, _width, _height);}
     }
 
     internal void Initialize(Vector2 startingPos, Rectangle playAreaBoundingBox)
@@ -49,8 +55,7 @@ public class Paddle
 
     internal void Draw(SpriteBatch spriteBatch)
     {
-        Rectangle paddleRectangle = new Rectangle((int) _position.X, (int) _position.Y, _width, _height);
-        spriteBatch.Draw(_texture, paddleRectangle, Color.White);
+         spriteBatch.Draw(_texture, BoundingBox, Color.White);
     }
 }
 

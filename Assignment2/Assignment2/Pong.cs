@@ -42,8 +42,8 @@ public class Pong : Game
         _graphics.ApplyChanges();
 
         _ball = new Ball();
-        _paddleRight = new Paddle();
         _paddleLeft = new Paddle();
+        _paddleRight = new Paddle();
 
         Vector2 _startingPosBall = new Vector2(_WindowWidth/2, _WindowHeight/2);
         Vector2 _startingPosPaddleLeft = new Vector2(10, _WindowHeight / 2 - 54);
@@ -59,24 +59,46 @@ public class Pong : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _backgroundTexture = Content.Load<Texture2D>("Court");
+        
         _ball.LoadContent(Content);
+        _paddleLeft.LoadContent(Content);
         _paddleRight.LoadContent(Content);
     }
 
     protected override void Update(GameTime gameTime) 
     {
-       float dt = (float) gameTime.ElapsedGameTime.TotalSeconds
+       float dt = (float) gameTime.ElapsedGameTime.TotalSeconds;
 
         _ball.Update(gameTime);
+        _paddleLeft.Update(gameTime);
+        _paddleRight.Update(gameTime);
 
         #region keyboard input
         KeyboardState kbState = Keyboard.GetState();
+
+        if(kbState.IsKeyDown(Keys.W))
+            _paddleLeft.Direction = new Vector2(0, -1);
+        else if(kbState.IsKeyDown(Keys.S))
+            _paddleLeft.Direction = new Vector2(0, 1);
+        else
+            _paddleLeft.Direction = Vector2.Zero;
+
+        if(kbState.IsKeyDown(Keys.LeftShift))
+            _paddleLeft.Speed = 2;
+        else
+            _paddleLeft.Speed = 1;
+
         if(kbState.IsKeyDown(Keys.Up))
             _paddleRight.Direction = new Vector2(0, -1);
         else if(kbState.IsKeyDown(Keys.Down))
             _paddleRight.Direction = new Vector2(0, 1);
         else
             _paddleRight.Direction = Vector2.Zero;
+        
+        if(kbState.IsKeyDown(Keys.RightShift))
+            _paddleRight.Speed = 2;
+        else
+            _paddleRight.Speed = 1;
         #endregion
 
         base.Update(gameTime);
@@ -90,6 +112,7 @@ public class Pong : Game
 
         _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, _WindowWidth, _WindowHeight), Color.White);
         _ball.Draw(_spriteBatch);
+        _paddleLeft.Draw(_spriteBatch);
         _paddleRight.Draw(_spriteBatch);
 
         _spriteBatch.End();
