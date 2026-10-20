@@ -1,0 +1,12 @@
+Pamela Roy Assignment 02 Accomplishments:
+
+Functional Requirements
+
+- Second Paddle [0/2]
+- Code Refactor [0/2]
+- Ball collision handling [0/2]
+- Stationary blocker [0/3]
+- Moving blocker - vertical [0/3]
+- Paddle speed boost [0/3]
+- Brick objects [0/3]
+- Ball exit behaviour [0/2]
