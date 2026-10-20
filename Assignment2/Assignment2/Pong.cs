@@ -13,7 +13,7 @@ public class Pong : Game
     private SpriteBatch _spriteBatch;
 
     private Ball _ball;
-    private Paddle _paddle;
+    private Brick _paddle;
 
     private Texture2D _backgroundTexture;
 
@@ -42,7 +42,7 @@ public class Pong : Game
         _graphics.ApplyChanges();
 
         _ball = new Ball();
-        _paddle = new Paddle();
+        _paddle = new Brick();
         Vector2 _startingPosBall = new Vector2(_WindowWidth/2, _WindowHeight/2);
         Vector2 _startingPosPaddle = new Vector2(10, _WindowHeight / 2 - 54);
 

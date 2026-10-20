@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Assignment2;
 
-public class Paddle
+public class Brick
 {
     private const int _width = 12, _height = 108, _speed = 240;
 
