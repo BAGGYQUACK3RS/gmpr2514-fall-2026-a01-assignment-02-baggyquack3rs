@@ -1,17 +1,26 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace Assignment2;
 
-public class Brick
+public class Paddle
 {
     private const int _width = 12, _height = 108, _speed = 240;
 
     private Texture2D _texture;
     private Vector2 _position, _velocity;   
     private Rectangle _playAreaBoundingBox;
+
+    internal Vector2 Direction
+    {
+        set{ _velocity = value * _speed;}
+    }
+
+    internal Rectangle BoundingBox
+    {
+        get { return new Rectangle((int)_position.X, (int)_position.Y, _PaddleWidth, _PaddleHeight);}
+    }
 
     internal void Initialize(Vector2 startingPos, Rectangle playAreaBoundingBox)
     {
@@ -25,19 +34,10 @@ public class Brick
         _texture = content.Load<Texture2D>("Paddle"); 
     }
 
-    internal void Update(GameTime gameTime, KeyboardState kbState)
+    internal void Update(GameTime gameTime)
     {
         float dt = (float) gameTime.ElapsedGameTime.TotalSeconds;
-
-        if(kbState.IsKeyDown(Keys.Up)) {
-            _velocity = new Vector2(0, -_speed);
-            _position += _velocity * dt;
-        }
-
-        if(kbState.IsKeyDown(Keys.Down)) {
-            _velocity = new Vector2(0, _speed);
-            _position += _velocity * dt;
-        }
+        _position += _velocity * dt;
 
         if (_position.Y <= _playAreaBoundingBox.Top) {
             _position.Y = _playAreaBoundingBox.Top;

@@ -13,7 +13,7 @@ public class Pong : Game
     private SpriteBatch _spriteBatch;
 
     private Ball _ball;
-    private Brick _paddle;
+    private Paddle _paddleLeft, _paddleRight;
 
     private Texture2D _backgroundTexture;
 
@@ -42,12 +42,16 @@ public class Pong : Game
         _graphics.ApplyChanges();
 
         _ball = new Ball();
-        _paddle = new Brick();
+        _paddleRight = new Paddle();
+        _paddleLeft = new Paddle();
+
         Vector2 _startingPosBall = new Vector2(_WindowWidth/2, _WindowHeight/2);
-        Vector2 _startingPosPaddle = new Vector2(10, _WindowHeight / 2 - 54);
+        Vector2 _startingPosPaddleLeft = new Vector2(10, _WindowHeight / 2 - 54);
+        Vector2 _startingPosPaddleRight = new Vector2(_WindowWidth - 22, _WindowHeight / 2 - 54);
 
         _ball.Initialize(_startingPosBall, PlayAreaBoundingBox);
-        _paddle.Initialize(_startingPosPaddle, PlayAreaBoundingBox);
+        _paddleLeft.Initialize(_startingPosPaddleLeft, PlayAreaBoundingBox);
+        _paddleRight.Initialize(_startingPosPaddleRight, PlayAreaBoundingBox);
         base.Initialize();
     }
 
@@ -56,16 +60,25 @@ public class Pong : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _backgroundTexture = Content.Load<Texture2D>("Court");
         _ball.LoadContent(Content);
-        _paddle.LoadContent(Content);
+        _paddleRight.LoadContent(Content);
     }
 
     protected override void Update(GameTime gameTime) 
     {
-       float dt = (float) gameTime.ElapsedGameTime.TotalSeconds;
-       KeyboardState kbState = Keyboard.GetState();
+       float dt = (float) gameTime.ElapsedGameTime.TotalSeconds
 
         _ball.Update(gameTime);
-        _paddle.Update(gameTime, kbState);
+
+        #region keyboard input
+        KeyboardState kbState = Keyboard.GetState();
+        if(kbState.IsKeyDown(Keys.Up))
+            _paddleRight.Direction = new Vector2(0, -1);
+        else if(kbState.IsKeyDown(Keys.Down))
+            _paddleRight.Direction = new Vector2(0, 1);
+        else
+            _paddleRight.Direction = Vector2.Zero;
+        #endregion
+
         base.Update(gameTime);
     }
 
@@ -77,7 +90,7 @@ public class Pong : Game
 
         _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, _WindowWidth, _WindowHeight), Color.White);
         _ball.Draw(_spriteBatch);
-        _paddle.Draw(_spriteBatch);
+        _paddleRight.Draw(_spriteBatch);
 
         _spriteBatch.End();
 
