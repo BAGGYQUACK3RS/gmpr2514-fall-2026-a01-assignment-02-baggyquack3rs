@@ -6,25 +6,59 @@ namespace Assignment2;
 
 public class Brick
 {
+    private const int _WidthAndHeight = 30, _CollisionTimerIntervalMillis = 400;
+    private int _collisionTimerMillis;
+    private bool debounce = true;
+    private bool didCollide;
 
-    internal void Initialize()
+    private Texture2D _texture;
+    private Vector2 _position;
+
+    internal Rectangle BoundingBox
     {
-        
+        get { return new Rectangle((int)_position.X, (int)_position.Y, _WidthAndHeight, _WidthAndHeight);}
     }
 
-    internal void LoadContent(ContentManager content)
+
+    internal void Initialize(Vector2 startingPos)
     {
-        
+        _position = startingPos;
     }
 
     internal void Update(GameTime gameTime)
     {
-        
+        _collisionTimerMillis += gameTime.ElapsedGameTime.Milliseconds;
+    }
+
+    internal void LoadContent(ContentManager content)
+    {
+        _texture = content.Load<Texture2D>("Paddle"); 
     }
 
     internal void Draw(SpriteBatch spriteBatch)
     {
-        
+        if (didCollide == false && debounce == true)
+        {
+            Rectangle rectangle = new Rectangle((int) _position.X, (int)_position.Y, _WidthAndHeight, _WidthAndHeight);
+            spriteBatch.Draw(_texture, rectangle, Color.White); 
+        } else
+        {
+            debounce = false;
+        }
+    }
+
+    internal bool ProcessCollision(Rectangle otherBoundingBox)
+    {
+        didCollide = false;
+
+        if(_collisionTimerMillis >= _CollisionTimerIntervalMillis &&
+            BoundingBox.Intersects(otherBoundingBox))
+        {
+            _collisionTimerMillis = 0;
+            didCollide = true;           
+        }
+
+        return didCollide;
     }
 }
 

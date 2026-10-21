@@ -14,6 +14,7 @@ public class Pong : Game
 
     private Ball _ball;
     private Paddle _paddleLeft, _paddleRight;
+    private Brick _brick;
 
     private Texture2D _backgroundTexture;
 
@@ -44,6 +45,7 @@ public class Pong : Game
         _ball = new Ball();
         _paddleLeft = new Paddle();
         _paddleRight = new Paddle();
+        _brick = new Brick();
 
         Vector2 _startingPosBall = new Vector2(_WindowWidth/2, _WindowHeight/2);
         Vector2 _startingPosPaddleLeft = new Vector2(10, _WindowHeight / 2 - 54);
@@ -52,6 +54,7 @@ public class Pong : Game
         _ball.Initialize(_startingPosBall, PlayAreaBoundingBox);
         _paddleLeft.Initialize(_startingPosPaddleLeft, PlayAreaBoundingBox);
         _paddleRight.Initialize(_startingPosPaddleRight, PlayAreaBoundingBox);
+        _brick.Initialize(new Vector2(500, 300));
         base.Initialize();
     }
 
@@ -61,6 +64,7 @@ public class Pong : Game
         _backgroundTexture = Content.Load<Texture2D>("Court");
         
         _ball.LoadContent(Content);
+        _brick.LoadContent(Content);
         _paddleLeft.LoadContent(Content);
         _paddleRight.LoadContent(Content);
     }
@@ -70,6 +74,7 @@ public class Pong : Game
        float dt = (float) gameTime.ElapsedGameTime.TotalSeconds;
 
         _ball.Update(gameTime);
+        _brick.Update(gameTime);
         _paddleLeft.Update(gameTime);
         _paddleRight.Update(gameTime);
 
@@ -102,14 +107,17 @@ public class Pong : Game
         else
             _paddleRight.Speed = 1;
 
-        if(_ball.ProcessCollision(_paddleRight.BoundingBox) || _ball.ProcessCollision(_paddleLeft.BoundingBox))
+        if(_ball.ProcessCollision(_paddleRight.BoundingBox) || _ball.ProcessCollision(_paddleLeft.BoundingBox) || _ball.ProcessCollision(_brick.BoundingBox))
+        {
+            ;
+        }
+
+        if (_brick.ProcessCollision(_ball.BoundingBox))
         {
             ;
         }
 
         #endregion
-
-        
 
         base.Update(gameTime);
     }
@@ -124,6 +132,7 @@ public class Pong : Game
         _ball.Draw(_spriteBatch);
         _paddleLeft.Draw(_spriteBatch);
         _paddleRight.Draw(_spriteBatch);
+        _brick.Draw(_spriteBatch);
 
         _spriteBatch.End();
 
