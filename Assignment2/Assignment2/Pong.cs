@@ -15,6 +15,8 @@ public class Pong : Game
     private Ball _ball;
     private Paddle _paddleLeft, _paddleRight;
     private Brick _brick1, _brick2, _brick3, _brick4;
+    private BlockerStationary _blockerStationary;
+    private BlockerActive _blockerActive1, _blockerActive2;
 
     private Texture2D _backgroundTexture;
 
@@ -50,8 +52,8 @@ public class Pong : Game
         _paddleLeft = new Paddle();
         _paddleRight = new Paddle();
 
-        _paddleLeft.Initialize(new Vector2(10, _WindowHeight / 2 - 54), PlayAreaBoundingBox);
-        _paddleRight.Initialize(new Vector2(_WindowWidth - 22, _WindowHeight / 2 - 54), PlayAreaBoundingBox);
+        _paddleLeft.Initialize(new Vector2(30, _WindowHeight / 2 - 54), PlayAreaBoundingBox);
+        _paddleRight.Initialize(new Vector2(_WindowWidth - 52, _WindowHeight / 2 - 54), PlayAreaBoundingBox);
         #endregion
         #region bricks
         _brick1 = new Brick();
@@ -63,6 +65,16 @@ public class Pong : Game
         _brick2.Initialize(new Vector2(50, 370));
         _brick3.Initialize(new Vector2(670, 50));
         _brick4.Initialize(new Vector2(670, 370));
+        #endregion
+        #region blockers
+        _blockerStationary = new BlockerStationary();
+        _blockerStationary.Initialize(new Vector2(_WindowWidth/2 - 10, _WindowHeight/2 - 10));
+
+        _blockerActive1 = new BlockerActive();
+        _blockerActive1.Initialize(new Vector2(10, _WindowHeight / 2 - 54), PlayAreaBoundingBox);
+
+        _blockerActive2 = new BlockerActive();
+        _blockerActive2.Initialize(new Vector2(_WindowWidth - 22, _WindowHeight / 2 - 54), PlayAreaBoundingBox);
         #endregion
         base.Initialize();
     }
@@ -81,6 +93,10 @@ public class Pong : Game
         _brick3.LoadContent(Content);
         _brick4.LoadContent(Content);
 
+        _blockerStationary.LoadContent(Content);
+
+        _blockerActive1.LoadContent(Content);
+        _blockerActive2.LoadContent(Content);
     }
 
     protected override void Update(GameTime gameTime) 
@@ -96,6 +112,10 @@ public class Pong : Game
         _brick3.Update(gameTime);
         _brick4.Update(gameTime);
 
+        _blockerStationary.Update(gameTime);
+
+        _blockerActive1.Update(gameTime);
+        _blockerActive2.Update(gameTime);
 
         KeyboardState kbState = Keyboard.GetState();
 
@@ -127,7 +147,10 @@ public class Pong : Game
             _paddleRight.Speed = 1;
 
         if(_ball.ProcessCollision(_paddleRight.BoundingBox) || _ball.ProcessCollision(_paddleLeft.BoundingBox) || 
-        _ball.ProcessCollision(_brick1.BoundingBox) || _ball.ProcessCollision(_brick2.BoundingBox) || _ball.ProcessCollision(_brick3.BoundingBox) || _ball.ProcessCollision(_brick4.BoundingBox))
+        _ball.ProcessCollision(_brick1.BoundingBox) || _ball.ProcessCollision(_brick2.BoundingBox) || 
+        _ball.ProcessCollision(_brick3.BoundingBox) || _ball.ProcessCollision(_brick4.BoundingBox) || 
+        _ball.ProcessCollision(_blockerStationary.BoundingBox) ||
+        _ball.ProcessCollision(_blockerActive1.BoundingBox) || _ball.ProcessCollision(_blockerActive2.BoundingBox))
         {
             ;
         }
@@ -157,6 +180,11 @@ public class Pong : Game
         _brick2.Draw(_spriteBatch);
         _brick3.Draw(_spriteBatch);
         _brick4.Draw(_spriteBatch);
+
+        _blockerStationary.Draw(_spriteBatch);
+
+        _blockerActive1.Draw(_spriteBatch);
+        _blockerActive2.Draw(_spriteBatch);
 
         _spriteBatch.End();
 

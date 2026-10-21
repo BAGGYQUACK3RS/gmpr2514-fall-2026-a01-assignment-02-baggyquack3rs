@@ -6,28 +6,34 @@ namespace Assignment2;
 
 public class BlockerActive
 {
-private const int _WidthAndHeight = 30, _CollisionTimerIntervalMillis = 400;
-    private int _collisionTimerMillis;
-    private bool debounce = true;
-    private bool didCollide;
+    private const int _width = 12, _height = 108;
+    private int _speed = 60;
+    private Rectangle _playAreaBoundingBox;
 
     private Texture2D _texture;
     private Vector2 _position;
 
     internal Rectangle BoundingBox
     {
-        get { return new Rectangle((int)_position.X, (int)_position.Y, _WidthAndHeight, _WidthAndHeight);}
+        get { return new Rectangle((int)_position.X, (int)_position.Y, _width, _height);}
     }
 
-
-    internal void Initialize(Vector2 startingPos)
+    internal void Initialize(Vector2 startingPos, Rectangle playAreaBoundingBox)
     {
+        _playAreaBoundingBox = playAreaBoundingBox;
         _position = startingPos;
     }
 
     internal void Update(GameTime gameTime)
     {
-        _collisionTimerMillis += gameTime.ElapsedGameTime.Milliseconds;
+        float dt = (float) gameTime.ElapsedGameTime.TotalSeconds;
+
+        if (_position.Y <= _playAreaBoundingBox.Top || _position.Y + _height >= _playAreaBoundingBox.Bottom)
+        {
+            _speed = -_speed;
+        }
+
+        _position.Y += _speed * dt;
     }
 
     internal void LoadContent(ContentManager content)
@@ -37,30 +43,8 @@ private const int _WidthAndHeight = 30, _CollisionTimerIntervalMillis = 400;
 
     internal void Draw(SpriteBatch spriteBatch)
     {
-        if (didCollide == false && debounce == true)
-        {
-            Rectangle rectangle = new Rectangle((int) _position.X, (int)_position.Y, _WidthAndHeight, _WidthAndHeight);
-            spriteBatch.Draw(_texture, rectangle, Color.White); 
-        } else
-        {
-            // out of sight out of mind
-            _position = new Vector2(-100, -100);
-            debounce = false;
-        }
-    }
-
-    internal bool ProcessCollision(Rectangle otherBoundingBox)
-    {
-        didCollide = false;
-
-        if(_collisionTimerMillis >= _CollisionTimerIntervalMillis &&
-            BoundingBox.Intersects(otherBoundingBox))
-        {
-            _collisionTimerMillis = 0;
-            didCollide = true;           
-        }
-
-        return didCollide;
+        Rectangle rectangle = new Rectangle((int) _position.X, (int)_position.Y, _width, _height);
+        spriteBatch.Draw(_texture, rectangle, Color.White); 
     }
 }
 
