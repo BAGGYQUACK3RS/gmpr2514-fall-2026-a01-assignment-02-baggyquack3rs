@@ -73,9 +73,9 @@ public class Pong : Game
         _paddleLeft.Update(gameTime);
         _paddleRight.Update(gameTime);
 
-        #region keyboard input
         KeyboardState kbState = Keyboard.GetState();
 
+        #region leftpaddle
         if(kbState.IsKeyDown(Keys.W))
             _paddleLeft.Direction = new Vector2(0, -1);
         else if(kbState.IsKeyDown(Keys.S))
@@ -87,7 +87,9 @@ public class Pong : Game
             _paddleLeft.Speed = 2;
         else
             _paddleLeft.Speed = 1;
+        #endregion
 
+        #region rightpaddle
         if(kbState.IsKeyDown(Keys.Up))
             _paddleRight.Direction = new Vector2(0, -1);
         else if(kbState.IsKeyDown(Keys.Down))
@@ -99,7 +101,15 @@ public class Pong : Game
             _paddleRight.Speed = 2;
         else
             _paddleRight.Speed = 1;
+
+        if(_ball.ProcessCollision(_paddleRight.BoundingBox) || _ball.ProcessCollision(_paddleLeft.BoundingBox))
+        {
+            ;
+        }
+
         #endregion
+
+        
 
         base.Update(gameTime);
     }
