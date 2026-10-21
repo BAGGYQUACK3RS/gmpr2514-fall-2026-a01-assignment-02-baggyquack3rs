@@ -43,6 +43,8 @@ public class Brick
             spriteBatch.Draw(_texture, rectangle, Color.White); 
         } else
         {
+            // out of sight out of mind
+            _position = new Vector2(-100, -100);
             debounce = false;
         }
     }
